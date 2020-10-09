@@ -1,10 +1,14 @@
-@startuml
-actor client
-node app
-node car
-node tshirt
-
-car -> app
-app -> client
-client -> tshirt
+@startuml hej
+skinparam monochrome true
+left to right direction
+actor "Treasure owner" as client
+usecase "Create clue" as create
+usecase "Export treasure hunt" as export
+usecase "Treasure / next clue" as treasure
+usecase "Clue image" as image
+client -- create
+client -- export
+create -> treasure : <<include>>
+create --> image : <<include>>
+treasure -[hidden] image
 @enduml
