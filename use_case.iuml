@@ -3,7 +3,8 @@ skinparam monochrome true
 Actor "Treasure owner" as owner
 Entity "Frontend" as fe
 Entity "Application" as app
-Database "Storage" as db
+Database "Database" as db
+Database "Storage" as storage
 owner -> fe: Create hunt with a name and pwd
 fe -> app: POST: CreateHunt(name, pwd)
 app -> db: CreateHunt(name, pwd)
@@ -12,10 +13,21 @@ fe <- app: hunt id
 fe -> owner: Show hunt page (jwt cookie?)
 loop Owner creates all treasures
     owner -> fe: Upload image as clue to treasure
-    fe -> app: POST: CreateTreasure(huntId, ClueImage)
-    app -> db: AddTreasure(huntId, Image)\n(Default to end of hunt)
-    app <- db: returns list of treasures
+    fe -> app: POST: CreateTreasure(hunt_od, clue_image)
+    app -> db: Add treasure to hunt\n(Default to end of hunt)
+    app <- db: treasure id
+    app -> storage: Save image as <treasure_id>
+    app -> db: Fetch list of treasures
+    app <- db: list of treasures
     fe <- app: list of treasures
     owner <- fe: Show updated hunt page
 end
+owner -> fe: Move treasure up/down
+fe -> app: POST: Move treasure(hunt_id, treasure_index, direction) 
+app -> db: Update next of related treasures accordingly
+app <- db: ok
+app -> db: Fetch list of treasures
+app -> db: list of treasures
+fe <- app: list of treasures
+owner <- fe: Show updated hunt page
 @enduml
