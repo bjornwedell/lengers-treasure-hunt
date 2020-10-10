@@ -1,0 +1,21 @@
+@startuml Usecase
+skinparam monochrome true
+Actor "Treasure owner" as owner
+Entity "Frontend" as fe
+Entity "Application" as app
+Database "Storage" as db
+owner -> fe: Create hunt with a name and pwd
+fe -> app: POST: CreateHunt(name, pwd)
+app -> db: CreateHunt(name, pwd)
+app <- db: hunt id
+fe <- app: hunt id
+fe -> owner: Show hunt page (jwt cookie?)
+loop Owner creates all treasures
+    owner -> fe: Upload image as clue to treasure
+    fe -> app: POST: CreateTreasure(huntId, ClueImage)
+    app -> db: AddTreasure(huntId, Image)\n(Default to end of hunt)
+    app <- db: returns list of treasures
+    fe <- app: list of treasures
+    owner <- fe: Show updated hunt page
+end
+@enduml
