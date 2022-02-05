@@ -13,7 +13,7 @@ fe <- app: hunt id
 fe -> owner: Show hunt page (jwt cookie?)
 loop Owner creates all treasures
     owner -> fe: Upload image as clue to treasure
-    fe -> app: POST: CreateTreasure(hunt_od, clue_image)
+    fe -> app: POST: CreateTreasure(hunt_id, clue_image)
     app -> db: Add treasure to hunt\n(Default to end of hunt)
     app <- db: treasure id
     app -> storage: Save image as <treasure_id>
